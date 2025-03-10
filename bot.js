@@ -9,6 +9,7 @@ const botToken = process.env.BOT_TOKEN;
 const siteLink = process.env.SITE_LINK;
 const USER_EMAIL = process.env.USER_EMAIL;
 const USER_PASSWORD = process.env.USER_PASSWORD;
+const USER_ID = Number(process.env.USER_ID);
 
 const bot = new Telegraf(botToken);
 
@@ -81,7 +82,7 @@ async function addToCart(coinId) {
     }
 
     if (response.data.success) {
-      await bot.telegram.sendMessage(Number(process.env.USER_ID), `✅ Товар ${coinId} додано у кошик!`);
+      await bot.telegram.sendMessage(USER_ID, `✅ Товар ${coinId} додано у кошик!`);
       activeSubscriptions.delete(coinId);
     } else if (response.data.redirect === "login.php") {
       console.log("⏳ Сесія прострочена, виконуємо повторний логін...");
@@ -115,6 +116,7 @@ bot.command("list", async (ctx) => {
 });
 
 bot.hears(/\/subscribe_(\d+)/, async (ctx) => {
+  if (ctx.from.id !== USER_ID) return;
   const coinId = ctx.match[1];
   if (!activeSubscriptions.has(coinId)) {
     activeSubscriptions.add(coinId);
@@ -125,6 +127,7 @@ bot.hears(/\/subscribe_(\d+)/, async (ctx) => {
 });
 
 bot.hears(/\/unsubscribe_(\d+)/, async (ctx) => {
+  if (ctx.from.id !== USER_ID) return;
   const coinId = ctx.match[1];
   if (activeSubscriptions.delete(coinId)) {
     ctx.reply(`❌ Ви відписались від монети ${coinId}.`);
@@ -134,6 +137,11 @@ bot.hears(/\/unsubscribe_(\d+)/, async (ctx) => {
 });
 
 cron.schedule("3,33 * * * *", async () => {
+  const kyivTime = moment().tz("Europe/Kiev");
+  const hour = kyivTime.hour();
+  if (hour < 8 || hour >= 16) {
+    return;
+  }
   console.log("🔄 Виконую логін...");
   await login();
 });

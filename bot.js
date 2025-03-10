@@ -9,6 +9,7 @@ const botToken = process.env.BOT_TOKEN;
 const siteLink = process.env.SITE_LINK;
 const USER_EMAIL = process.env.USER_EMAIL;
 const USER_PASSWORD = process.env.USER_PASSWORD;
+const CID = process.env.CID;
 const USER_ID = Number(process.env.USER_ID);
 
 const bot = new Telegraf(botToken);
@@ -55,7 +56,7 @@ async function login() {
 async function addToCart(coinId) {
   try {
     const response = await axios.post(
-      `${siteLink}/?action=add_product&cid=176736`,
+      `${siteLink}/?action=add_product&cid=${CID}`,
       new URLSearchParams({
         products_id: coinId,
         cart_quantity: 1,

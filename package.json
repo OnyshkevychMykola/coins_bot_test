@@ -1,0 +1,21 @@
+{
+  "name": "coins_bot",
+  "version": "1.0.0",
+  "description": "This is bot for nbu coins",
+  "main": "bot.js",
+  "scripts": {
+    "dev": "nodemon bot.js",
+    "start": "node bot.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.8.1",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.4.7",
+    "moment-timezone": "^0.5.47",
+    "node-cron": "^3.0.3",
+    "nodemon": "^3.1.9",
+    "telegraf": "^4.16.3"
+  }
+}

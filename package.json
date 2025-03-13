@@ -2,10 +2,10 @@
   "name": "coins_bot",
   "version": "1.0.0",
   "description": "This is bot for nbu coins",
-  "main": "bot.js",
+  "main": "browser-task.js",
   "scripts": {
-    "dev": "nodemon bot.js",
-    "start": "node bot.js"
+    "dev": "nodemon browser-task.js",
+    "start": "node browser-task.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +16,11 @@
     "moment-timezone": "^0.5.47",
     "node-cron": "^3.0.3",
     "nodemon": "^3.1.9",
+    "puppeteer": "^24.4.0",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-click-and-wait": "^2.3.3",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "puppeteer-real-browser": "^1.4.2",
     "telegraf": "^4.16.3"
   }
 }

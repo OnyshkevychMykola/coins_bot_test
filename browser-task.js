@@ -37,7 +37,7 @@ async function sendTelegramMessage(message) {
   await page.goto(productUrl, { waitUntil: "networkidle2" });
 
   console.log("Починаємо моніторинг сторінки...");
-  const productId = "833"; // Захардкоджений ID
+  const productId = "1142"; // Захардкоджений ID
 
   while (true) {
     console.log("Перезавантажуємо сторінку...");

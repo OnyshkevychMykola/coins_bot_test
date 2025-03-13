@@ -86,6 +86,7 @@ async function monitorPage() {
     await page.reload({ waitUntil: "networkidle2" });
 
     for (const coinId of activeSubscriptions) {
+      console.log(coinId, 'coinId');
       const isButtonVisible = await page.evaluate((id) => {
         const button = document.querySelector(`span.main-basked-icon.add2cart[data-id="${id}"]`);
         if (button) {
@@ -103,7 +104,9 @@ async function monitorPage() {
     }
 
     if (activeSubscriptions.size === 0) {
-      console.log("✅ Всі підписки оброблені, закриваємо браузер.");
+      console.log("✅ Всі підписки оброблені. Очікуємо 3 хвилини перед закриттям браузера...");
+      await new Promise((resolve) => setTimeout(resolve, 3 * 60 * 1000));
+      console.log("❌ Закриваємо браузер.");
       await browser.close();
       break;
     }

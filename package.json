@@ -4,8 +4,8 @@
   "description": "This is bot for nbu coins",
   "main": "browser-task.js",
   "scripts": {
-    "dev": "nodemon browser-task.js",
-    "start": "node browser-task.js"
+    "dev": "nodemon --exec node -r dotenv/config browser-task.js",
+    "start": "node -r dotenv/config browser-task.js"
   },
   "author": "",
   "license": "ISC",

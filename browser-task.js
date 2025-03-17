@@ -42,10 +42,8 @@ async function monitorPage(email, password) {
 }
 
 async function runMonitoring() {
-  await  Promise.all([
-      monitorPage(process.env.USER_EMAIL, process.env.USER_PASSWORD),
-      monitorPage(process.env.USER_EMAIL1, process.env.USER_PASSWORD1)
-    ]);
+  const accounts = process.env.ACCOUNTS.split(';').map(acc => acc.split(':'));
+  await Promise.all(accounts.map(([email, password]) => monitorPage(email, password)));
 }
 
 runMonitoring();

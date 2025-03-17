@@ -6,7 +6,7 @@ const cron = require('node-cron');
 const siteLink = process.env.SITE_LINK;
 let coinId = process.env.SUBSCRIPTION;
 
-async function monitorPage() {
+async function monitorPage(email, password) {
   const { browser, page } = await connect({
     headless: false,
     turnstile: true,
@@ -15,8 +15,8 @@ async function monitorPage() {
 
   await page.setViewport({ width: 1920, height: 1080 });
   await page.goto("https://coins.bank.gov.ua/login.php", { waitUntil: "networkidle2" });
-  await page.type('input[name="email_address"]', process.env.USER_EMAIL);
-  await page.type('input[name="password"]', process.env.USER_PASSWORD);
+  await page.type('input[name="email_address"]', email);
+  await page.type('input[name="password"]', password);
   await page.click("button.btn-default");
 
   await page.goto(`${siteLink}/catalog.html`, { waitUntil: "networkidle2" });
@@ -27,13 +27,12 @@ async function monitorPage() {
       const button = document.querySelector(`span.main-basked-icon.add2cart[data-id="${id}"]`);
       if (button) {
         button.click();
-        coinId=null
         return true;
       }
       return false;
     }, coinId);
     if (isButtonVisible) {
-      console.log(`✅ Монета ID ${coinId} додана у кошик!`);
+      console.log(`✅ [${email}] Монета ID ${coinId} додана у кошик!`);
       await new Promise((resolve) => setTimeout(resolve, 3 * 60 * 1000));
       await browser.close();
       break;
@@ -45,9 +44,9 @@ async function monitorPage() {
 
 cron.schedule('* * * * *', async () => {
   const kyivTime = moment().tz("Europe/Kiev");
-  console.log(process.env, 'env')
-  if (kyivTime.hour() === 20 && kyivTime.minute() >= 0 && kyivTime.minute() <= 1) {
-    await Promise.all([
+  if (kyivTime.hour() === 10 && kyivTime.minute() >= 0 && kyivTime.minute() <= 1) {
+    await
+      Promise.all([
       monitorPage(process.env.USER_EMAIL, process.env.USER_PASSWORD),
       monitorPage(process.env.USER_EMAIL1, process.env.USER_PASSWORD1)
     ]);

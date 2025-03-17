@@ -1,7 +1,5 @@
 require("dotenv").config();
 const { connect } = require("puppeteer-real-browser");
-const moment = require("moment-timezone");
-const cron = require('node-cron');
 
 const siteLink = process.env.SITE_LINK;
 let coinId = process.env.SUBSCRIPTION;
@@ -32,23 +30,22 @@ async function monitorPage(email, password) {
       return false;
     }, coinId);
     if (isButtonVisible) {
-      console.log(`✅ [${email}] Монета ID ${coinId} додана у кошик!`);
-      await new Promise((resolve) => setTimeout(resolve, 3 * 60 * 1000));
+      const timestamp = new Date().toLocaleTimeString('uk-UA', { hour12: false });
+      console.log(`✅ [${email}] Монета ID ${coinId} додана у кошик о ${timestamp}!`);
+      await new Promise((resolve) => setTimeout(resolve, 15 * 60 * 1000));
       await browser.close();
       break;
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 700));
   }
 }
 
-cron.schedule('* * * * *', async () => {
-  const kyivTime = moment().tz("Europe/Kiev");
-  if (kyivTime.hour() === 10 && kyivTime.minute() >= 0 && kyivTime.minute() <= 1) {
-    await
-      Promise.all([
+async function runMonitoring() {
+  await  Promise.all([
       monitorPage(process.env.USER_EMAIL, process.env.USER_PASSWORD),
       monitorPage(process.env.USER_EMAIL1, process.env.USER_PASSWORD1)
     ]);
-  }
-});
+}
+
+runMonitoring();

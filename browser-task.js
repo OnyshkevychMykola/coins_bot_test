@@ -12,7 +12,7 @@ async function monitorPage(email, password) {
   });
 
   await page.setViewport({ width: 1920, height: 1080 });
-  await page.goto("https://coins.bank.gov.ua/login.php", { waitUntil: "networkidle2" });
+  await page.goto(`${siteLink}/login.php`, { waitUntil: "networkidle2" });
   await page.type('input[name="email_address"]', email);
   await page.type('input[name="password"]', password);
   await page.click("button.btn-default");
